@@ -1,7 +1,8 @@
 # bashDir
 
-> cd to $HOME
-> git clone git@github.com:/KingSolomon1954/bashDir.git .bashdir
+cd to $HOME
 
-> cd to .bashdir
-> ./deployBash.sh
+git clone git@github.com:KingSolomon1954/bashDir.git .bashdir
+
+cd to .bashdir
+./deployBash.sh
