@@ -1,0 +1,53 @@
+# -----------------------------------------------------------
+#
+# Define environment variable holding path to my shell library
+#
+declare -x BASH_LIB=$HOME/bin/shellLib
+
+# -----------------------------------------------------------
+#
+# Function to source shell library functions
+#
+bashLoad ()
+{
+    if ! source $BASH_LIB/$1; then
+        if [ ! -d "$BASH_LIB" ]; then
+            echo "[ERROR] BASH_LIB $BASH_LIB does not exist" && exit 1
+        fi
+    fi
+}
+export -f bashLoad
+
+# -----------------------------------------------------------
+
+if [ ${OSTYPE} = "cygwin" ]; then
+    appendToPath "${HOME}/pkg/android-sdk/tools"
+    appendToPath "${HOME}/pkg/android-sdk/platform-tools"
+
+    export ANT_HOME="${HOME}/pkg/apache-ant-1.9.4"
+    appendToPath "${ANT_HOME}/bin"
+
+    export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_60"
+    # Needs to precede windows/system/java.exe
+    prependToPath "${JAVA_HOME}/bin"
+
+    # export CLASSPATH="c:/howie/proj/craps/src/java/classes;c:/howie/pkg/junit3.8.1/junit.jar"
+    alias  m="make TGT=cygwin-x86"
+    alias md="make TGT=cygwin-x86 CXXDEBUG=\"-ggdb -DGDEBUG\""
+    alias mo="make TGT=cygwin-x86 CXXDEBUG=\"-O3 -DNDEBUG\""
+    export P4CONFIG=.p4config
+    p4()
+    {
+        PWD=$(cygpath -aw .) command p4 "$@"
+    }
+elif [ ${OSTYPE} = "linux-gnu" -o ${OSTYPE} = "linux" ]; then
+    alias  m='make TGT=linux-x86_64'
+    alias md='make TGT=linux-x86_64 CXXDEBUG="-ggdb -DGDEBUG"'
+    alias mo="make TGT=linux-x86_64 CXXDEBUG=\"-O3 -DNDEBUG\""
+    export P4CONFIG=.p4config
+    appendToPath "${HOME}/pkg/jam-2.4/bin.linuxx86"
+else
+    echo "Unhandled OSTYPE in file: bash_programming"
+fi
+
+# -----------------------------------------------------------

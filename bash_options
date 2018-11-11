@@ -1,0 +1,40 @@
+if [ ${USER} = "hsolomon" -o ${USER?} = "howie" ]; then
+    # White text on blue highlight
+    PS1="\e[0m\e[44m\u@\h:\w>\e[0m\n"
+else
+    # Black text on green highlight
+    PS1="\e[30m\e[42m\u@\h:\w>\e[0m\n"
+fi
+
+set completion-ignore-case on
+#       If set to On, readline performs filename matching and completion
+#       in a case-insensitive fashion.
+
+set -o notify
+#       If set, bash reports terminated background jobs immedi-
+#       ately,  rather  than  waiting until before printing the
+#       next primary prompt.
+
+FIGNORE=.class
+#       A colon-separated list of suffixes to ignore when  per-
+#       forming filename completion. A filename whose suffix
+#       matches one of the entries in FIGNORE is excluded from
+#       the list of matched filenames.
+#       A sample value is ``.o:~''.
+
+HISTIGNORE=ignoredups:ignorespace
+#       If set to a value of ignoredups, lines matching the
+#       last history line are not entered into history. If
+#       set to a value of ignorespace, lines which begin
+#       witha <space> are not entered on the history list. 
+
+HISTSIZE=5000
+HISTFILESIZE=10000
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# change to dirs without specifying cd
+shopt -s autocd
+
+unset MAILCHECK

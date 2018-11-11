@@ -1,0 +1,7 @@
+# Show dirs as magenta instead of the default blue
+# And no additional attributes for sticky or other writable
+# Winds up setting LS_COLORS="di=01;35:tw=01;35:ow=01;35:"
+#
+DIR 01;35                   # dirs as magenta instead of the default blue
+STICKY_OTHER_WRITABLE 01;35 # dir that is sticky and other-writable (+t,o+w)
+OTHER_WRITABLE 01;35        # dir that is other-writable (o+w) and not sticky
