@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Need to run this from the git dotfiles/bashdir directory
+# Need to run this from the .bashdir directory
 
 bashLoad symlinkFile
 
@@ -11,10 +11,6 @@ if [ ! -L "$HOME/.bashrc" ]; then
     fi
 fi
 
-thisDir="$(pwd)"
-upDir="$(cd .. && pwd)"
-
 # ln -s              TARGET       LINK_NAME
-symlinkFile $thisDir/bashrc       $HOME/.bashrc
-symlinkFile $upDir/bashdir        $HOME/.bashdir
-symlinkFile $thisDir/bash_profile $HOME/.bash_profile
+symlinkFile $(pwd)/bashrc       $HOME/.bashrc
+symlinkFile $(pwd)/bash_profile $HOME/.bash_profile
