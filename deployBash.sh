@@ -2,7 +2,7 @@
 #
 # Need to run this from the .bashdir directory
 
-bashLoad symlinkFile
+import symlinkFile
 
 # Preserve original .bashrc for reference
 if [ ! -L "$HOME/.bashrc" ]; then
