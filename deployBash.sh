@@ -1,8 +1,32 @@
 #!/bin/bash
 #
 # Need to run this from the .bashdir directory
+#
+# Can't import on first setups - chicken and egg
+# import won't yet be defined.
+#
+# ----------------------------------------------
 
-import symlinkFile
+# Local helper function
+symlinkFile ()
+{
+    local target="$1"
+    local linkName="$2"
+
+    if [ ! -L "${linkName}" ]; then
+        if [ -e "${linkName}" ]; then
+            echo "[ERROR] ${linkName} exists but it's not a symlink. Please fix that manually" && exit 1
+        else
+            echo ln -s "${target}" "${linkName}"
+                 ln -s "${target}" "${linkName}"
+            echo "[OK] ${linkName} -> ${target}"
+        fi
+    else
+        echo "[INFO] ${linkName} already symlinked"
+    fi
+}
+
+# ----------------------------------------------
 
 # Preserve original .bashrc for reference
 if [ ! -L "$HOME/.bashrc" ]; then
@@ -11,8 +35,10 @@ if [ ! -L "$HOME/.bashrc" ]; then
     fi
 fi
 
-# ln -s              TARGET       LINK_NAME
-symlinkFile $(pwd)/bashrc       $HOME/.bashrc
+# link    TARGET    LINK_NAME
+symlinkFile $(pwd)/bashrc $HOME/.bashrc
+
+# ----------------------------------------------
 
 # Preserve original .bash_profile for reference
 if [ ! -L "$HOME/.bash_profile" ]; then
@@ -21,5 +47,7 @@ if [ ! -L "$HOME/.bash_profile" ]; then
     fi
 fi
 
-# ln -s              TARGET       LINK_NAME
+# link    TARGET          LINK_NAME
 symlinkFile $(pwd)/bash_profile $HOME/.bash_profile
+
+# ----------------------------------------------
