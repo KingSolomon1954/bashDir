@@ -52,9 +52,11 @@ fi
 
 # --------------------------------------------------
 
-if [ -f ~/.bashdir/bash_${OSTYPE} ]; then
-    . ~/.bashdir/bash_${OSTYPE}
+if [ -f ~/.bashdir/bash_${TESTABLE_OSTYPE} ]; then
+    . ~/.bashdir/bash_${TESTABLE_OSTYPE}
 fi
+
+unset TESTABLE_OSTYPE
 
 # --------------------------------------------------
 

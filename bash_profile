@@ -49,6 +49,20 @@ sshCheckDisplay()
             fi
         fi
     fi
+    if [ ${HOSTNAME} = "vcamss01" ]; then
+        if [ -n "${SSH_CLIENT}" ]; then
+            if [ -z "${DISPLAY}" ]; then
+                sshSetDisplay ${SSH_CLIENT}
+            fi
+        fi
+    fi
+    if [ ${HOSTNAME} = "vcatpemd02" ]; then
+        if [ -n "${SSH_CLIENT}" ]; then
+            if [ -z "${DISPLAY}" ]; then
+                sshSetDisplay ${SSH_CLIENT}
+            fi
+        fi
+    fi
 }
 
 sshCheckDisplay

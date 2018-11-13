@@ -20,7 +20,12 @@ export -f import
 
 # -----------------------------------------------------------
 
-if [ ${OSTYPE} = "cygwin" ]; then
+# If p4 in path then Perforce is installed.
+if type -t p4 > /dev/null; then
+    export P4CONFIG=.p4config
+fi
+
+if [ "${TESTABLE_OSTYPE}" = "cygwin" ]; then
     appendToPath "${HOME}/pkg/android-sdk/tools"
     appendToPath "${HOME}/pkg/android-sdk/platform-tools"
 
@@ -35,19 +40,29 @@ if [ ${OSTYPE} = "cygwin" ]; then
     alias  m="make TGT=cygwin-x86"
     alias md="make TGT=cygwin-x86 CXXDEBUG=\"-ggdb -DGDEBUG\""
     alias mo="make TGT=cygwin-x86 CXXDEBUG=\"-O3 -DNDEBUG\""
-    export P4CONFIG=.p4config
-    p4()
-    {
-        PWD=$(cygpath -aw .) command p4 "$@"
-    }
-elif [ ${OSTYPE} = "linux-gnu" -o ${OSTYPE} = "linux" ]; then
+    if [ ! -z ${P4CONFIG+x} ]; then
+        p4()
+        {
+            PWD=$(cygpath -aw .) command p4 "$@"
+        }
+    fi
+elif [ "${TESTABLE_OSTYPE}" = "linux" ]; then
     alias  m='make TGT=linux-x86_64'
     alias md='make TGT=linux-x86_64 CXXDEBUG="-ggdb -DGDEBUG"'
     alias mo="make TGT=linux-x86_64 CXXDEBUG=\"-O3 -DNDEBUG\""
-    export P4CONFIG=.p4config
-    appendToPath "${HOME}/pkg/jam-2.4/bin.linuxx86"
+elif [ "${TESTABLE_OSTYPE}" = "darwin" ]; then
+    alias  m='make TGT=linux-x86_64'
+    alias md='make TGT=linux-x86_64 CXXDEBUG="-ggdb -DGDEBUG"'
+    alias mo="make TGT=linux-x86_64 CXXDEBUG=\"-O3 -DNDEBUG\""
+    if [ -d /Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home ]; then
+        export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home
+    fi
 else
-    echo "Unhandled OSTYPE in file: bash_programming"
+    echo "Unhandled TESTABLE_OSTYPE in file: bash_programming"
 fi
 
 # -----------------------------------------------------------
+
+if [ -f /Applications/Perforce/p4merge.app/Contents/MacOS/p4merge ]; then
+    alias gdiff="/Applications/Perforce/p4merge.app/Contents/MacOS/p4merge"
+fi

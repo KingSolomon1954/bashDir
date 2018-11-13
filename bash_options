@@ -38,3 +38,17 @@ shopt -s histappend
 shopt -s autocd
 
 unset MAILCHECK
+
+# Define our own OSTYPE that we can efficiently test for later.
+# It's used in several case blocks later.
+#
+if echo ${OSTYPE} | grep -q -i "cygwin"; then
+    TESTABLE_OSTYPE="cygwin"
+elif echo ${OSTYPE} | grep -q -i "linux" ; then
+    TESTABLE_OSTYPE="linux"
+elif echo ${OSTYPE} | grep -q -i "darwin" ; then
+    TESTABLE_OSTYPE="darwin"
+else
+    TESTABLE_OSTYPE="unknown"
+    echo "Unhandled OSTYPE in file: bash_options"
+fi
