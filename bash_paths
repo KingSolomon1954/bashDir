@@ -16,8 +16,9 @@ appendToPath   "/sbin"
 appendToPath   "/usr/sbin"
 appendToPath   "/usr/local/sbin"
 appendToPath   "${HOME}/bin"
-appendToPath   "${HOME}/pkg/jython2.7.0/bin"
 
+appendToPath   "${HOME}/pkg/jython2.7.0/bin"
+appendToPath   "${HOME}/pkg/java/jdk-9.0.4/bin"
 appendToPath   "/opt/apache-maven-3.5.2/bin"
 prependToPath  "/usr/local/opt/coreutils/libexec/gnubin"
 
