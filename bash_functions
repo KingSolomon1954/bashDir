@@ -66,7 +66,7 @@ me()
 
 em()
 {
-    local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/bin/emacs"
+    local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
     local emacsExec=""
 
     for e in ${listOfEmacsLocations} ; do
