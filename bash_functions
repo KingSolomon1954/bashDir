@@ -90,11 +90,11 @@ findEmacs()
 em()
 {
     findEmacs
-    if [ ${OSTYPE} = "cygwin" ]; then
+    if [ "${OSTYPE}" = "cygwin" ]; then
         # On cygwin, apparently emacs doesn't see INFOPATH so you can't
         # "read the manual" from within emacs itself. If I supply INFOPATH
         # directly on the command line invocation then that works.
-        INFOPATH=$(cygpath -w -p $INFOPATH) ${emacsExec} $(cygpath -i -w -- "$@" ) &
+        INFOPATH=$(cygpath -w -p "${INFOPATH}") "${emacsExec}" $(cygpath -i -w -- "$@" ) &
     else
         local xyz="$*"
         if [ "${xyz/-nw }" != "${xyz}" ]; then
