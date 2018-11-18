@@ -64,28 +64,42 @@ me()
 
 # --------------------------------------------------
 
-em()
+findEmacs()
 {
+    if [ "X${emacsExec}" != "X" ]; then
+        # emacsExec is already found
+        return 0
+    fi
+
     local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
-    local emacsExec=""
 
     for e in ${listOfEmacsLocations} ; do
-        if [ -x $e ]; then
-            emacsExec=$e
-            break
+        if [ -x "$e" ]; then
+            emacsExec="$e"
+            emacsClient="${e}client"
+            return 0
         fi
     done
 
-    if [ "${emacsExec}" = "" ]; then
-        echo "Unable to locate emacs executable in ${listOfEmacsLocations}" 1>&2
-        return 1
-    fi
+    echo "Unable to locate emacs executable in ${listOfEmacsLocations}" 1>&2
+    return 1
+}
 
+# --------------------------------------------------
+
+em()
+{
+    findEmacs
     if [ ${OSTYPE} = "cygwin" ]; then
-        INFOPATH=$(cygpath -w -p $INFOPATH) ${emacsExec} $(cygpath -i -w "$@" ) &
+        # On cygwin, apparently emacs doesn't see INFOPATH so you can't
+        # "read the manual" from within emacs itself. If I supply INFOPATH
+        # directly on the command line invocation then that works.
+        INFOPATH=$(cygpath -w -p $INFOPATH) ${emacsExec} $(cygpath -i -w -- "$@" ) &
     else
         local xyz="$*"
-        if [ "${xyz/-nw}" != "${xyz}" -o "${DISPLAY}X" = "X" ]; then
+        if [ "${xyz/-nw }" != "${xyz}" ]; then
+            ${emacsExec} "$@"
+        elif [ "X${DISPLAY}" = "X" ]; then
             ${emacsExec} -nw "$@"
         else
             ${emacsExec} -fh "$@" &
@@ -95,14 +109,38 @@ em()
 
 # --------------------------------------------------
 
+emc()
+{
+    findEmacs
+    local xyz="$*"
+    if [ "${xyz/-nw }" != "${xyz}" ]; then
+        ${emacsClient} "$@"
+    elif [ "X${DISPLAY}" = "X" ]; then
+        ${emacsClient} -nw "$@"
+    else
+        ${emacsClient} -c -fh "$@" &
+    fi
+}
+
+# --------------------------------------------------
+
+emdaemon()
+{
+    findEmacs
+    rm -f ~/.emacs.desktop.lock ~/.emacs.d/.emacs.desktop.lock
+    (cd ~ && ${emacsExec} --daemon)
+}
+
+# --------------------------------------------------
+
 tree()
 {
-    tmpFile=/tmp/tree$$
+    local tmpFile=/tmp/tree$$
     find . -type d -print > ${tmpFile}
-    topDir=$(pwd)
+    local topDir=$(pwd)
     trap 'rm -f ${tmpFile}; cd ${topDir}' 2 15
     while read dir; do
-        dir="cd ${dir// /\\ }"
+        local dir="cd ${dir// /\\ }"
         eval "${dir}"
         echo -e "\E[0m\E[36m ${PWD}:\E[0m"
         eval $*
@@ -128,6 +166,8 @@ start()	# run command in background, redirect std out/error
 {
     if [ -d ~/log ]; then
         local logDir=~/log
+    elif [ -d ~/tmp ]; then
+        local logDir=~/tmp
     else
         local logDir=/tmp
     fi
@@ -187,7 +227,7 @@ envrm ()
     local entries="$(eval echo \$${1})"
 
     PS3="Component to remove from \${${1}} (ctrl-d to abort): "
-    SAVE_IFS=${IFS}; IFS=:
+    local SAVE_IFS=${IFS}; IFS=:
     trap 'echo -e "\nPress ctrl-d to abort"' SIGINT
     select d in ${entries} ; do
         if [ $d ]; then
@@ -200,7 +240,6 @@ envrm ()
     done
 
     IFS=${SAVE_IFS}
-    unset SAVE_IFS
     trap SIGINT   # undo the trap
 }
 
@@ -232,3 +271,5 @@ up ()
     done
     cd $upstring
 }
+
+# --------------------------------------------------
