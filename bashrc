@@ -12,52 +12,42 @@
 #
 [[ "$-" != *i* ]] && return
 
-# --------------------------------------------------
-
-if [ -f ~/.bashdir/bash_options ]; then
-    . ~/.bashdir/bash_options
-fi
+bd="${HOME}/.bashdir"
 
 # --------------------------------------------------
 
-if [ -f ~/.bashdir/bash_aliases ]; then
-    . ~/.bashdir/bash_aliases
-fi
+[[ -f "${bd}/bash_options" ]] && source "${bd}/bash_options"
 
 # --------------------------------------------------
 
-if [ -f ~/.bashdir/bash_functions ]; then
-    . ~/.bashdir/bash_functions
-fi
+[[ -f ~/.bashdir/bash_aliases ]] && source "${bd}/bash_aliases"
+
+# --------------------------------------------------
+
+[[ -f ${bd}/bash_functions ]] && source ${bd}/bash_functions
 
 # --------------------------------------------------
 
 # Include cd history features after cd alias is defined.
-if [ -f ~/.bashdir/cd_history ]; then
-    . ~/.bashdir/cd_history
-fi
+
+[[ -f ${bd}/cd_history ]] && source ${bd}/cd_history
 
 # --------------------------------------------------
 
-# Show dirs as magenta instead of the default blue
-if [ -f ~/.bashdir/dir_colors_howie ]; then
-    eval "`dircolors -b ~/.bashdir/dir_colors_howie`"
-fi
+[[ -f ${bd}/my_dir_colors ]] && eval "$(dircolors -b ${bd}/my_dir_colors)"
 
 # --------------------------------------------------
 
-if [ -f ~/.bashdir/bash_programming ]; then
-    . ~/.bashdir/bash_programming
-fi
+[[ -f ${bd}/bash_programming ]] && source ${bd}/bash_programming
 
 # --------------------------------------------------
 
-if [ -f ~/.bashdir/bash_${TESTABLE_OSTYPE} ]; then
-    . ~/.bashdir/bash_${TESTABLE_OSTYPE}
-fi
+[[ -f ${bd}/bash_${TESTABLE_OSTYPE} ]] && source ${bd}/bash_${TESTABLE_OSTYPE}
 
 unset TESTABLE_OSTYPE
 
 # --------------------------------------------------
+
+unset bd
 
 # end file
