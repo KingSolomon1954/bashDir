@@ -231,8 +231,13 @@ envls ()
 
 envrm ()
 {
+    if ! type -t deleteFromPath > /dev/null 2>&1; then
+        echo "Error: shell function deteFromPath() is undefined"
+        return 1
+    fi
+
     if [ $# -ne 1 ]; then
-        echo "Supply the name of an environment variable"
+        echo "Please supply the name of an environment variable"
         return 1
     fi
 
