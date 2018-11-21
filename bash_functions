@@ -66,11 +66,8 @@ me()
 
 findEmacs()
 {
-    if [ "X${emacsExec}" != "X" ]; then
-        # emacsExec is already found
-        return 0
-    fi
-
+    [[ -v emacsExec ]] && return 0    # already set
+                             
     local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
 
     for e in ${listOfEmacsLocations} ; do
@@ -92,33 +89,48 @@ em()
     findEmacs
     if [ "${OSTYPE}" = "cygwin" ]; then
         # On cygwin, apparently emacs doesn't see INFOPATH so you can't
-        # "read the manual" from within emacs itself. If I supply INFOPATH
-        # directly on the command line invocation then that works.
+        # "read the manual" from within emacs itself. But if I supply 
+        # INFOPATH directly on the command line invocation, then it works.
         INFOPATH=$(cygpath -w -p "${INFOPATH}") "${emacsExec}" $(cygpath -i -w -- "$@" ) &
     else
         local xyz="$*"
         if [ "${xyz/-nw }" != "${xyz}" ]; then
             ${emacsExec} "$@"
-        elif [ "X${DISPLAY}" = "X" ]; then
-            ${emacsExec} -nw "$@"
-        else
+        elif [[ -v DISPLAY ]]; then
             ${emacsExec} -fh "$@" &
+        else
+            ${emacsExec} -nw "$@"
         fi
     fi
 }
 
 # --------------------------------------------------
 
-emc()
+emc()      # Emacsclient open in new frame
 {
     findEmacs
-    local xyz="$*"
-    if [ "${xyz/-nw }" != "${xyz}" ]; then
-        ${emacsClient} "$@"
-    elif [ "X${DISPLAY}" = "X" ]; then
-        ${emacsClient} -nw "$@"
+    ${emacsClient} -c -fh "$@" &
+}
+
+# --------------------------------------------------
+
+emt()      # Emacsclient open within terminal
+{
+    findEmacs
+    ${emacsClient} -nw "$@"
+}
+
+# --------------------------------------------------
+
+ems()
+{
+    # Emacsclient opens file in an existing server process
+    local re='^[0-9]+$'
+
+    if [[ $2 =~ $re ]]; then
+        "${emacsClient}" -n +$2:0 $1
     else
-        ${emacsClient} -c -fh "$@" &
+        "${emacsClient}" -n "$@"
     fi
 }
 

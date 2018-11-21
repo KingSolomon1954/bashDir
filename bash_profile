@@ -9,18 +9,14 @@
 
 # Setup PATHs
 
-if [ -f ~/.bashdir/bash_paths ]; then
-    . ~/.bashdir/bash_paths
-fi
+[[ -f ${HOME}/.bashdir/bash_paths ]] && source ${HOME}/.bashdir/bash_paths
 
 # Now we source .bashrc. The .bashrc contains stuff
 # we want for all interactive shells. This login shell
 # is most certainly an interactive shell but the
 # the bash system leaves it to us for a login shell.
 #
-if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
-fi
+[[ -f ${HOME}/.bashrc ]] && source ${HOME}/.bashrc
 
 # Allow developer group to read/write files
 # umask -S g+rwx >> /dev/null
