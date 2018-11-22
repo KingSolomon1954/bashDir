@@ -109,7 +109,7 @@ em()
 emc()      # Emacsclient open in new frame
 {
     findEmacs
-    ${emacsClient} -c -fh "$@" &
+    ${emacsClient} -n -c -q "$@" &
 }
 
 # --------------------------------------------------
