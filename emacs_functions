@@ -8,7 +8,7 @@ emc()
         echo "[ERROR] EMACSCLIENT undefined" 1>&2
         return 1
     fi
-    ${EMACSCLIENT} -n -c -q "$@" &
+    ${EMACSCLIENT} -a -n -c -q "$@" &
 }
 
 # --------------------------------------------------
@@ -43,7 +43,7 @@ ems()
     if [[ $2 =~ $re ]]; then
         "${EMACSCLIENT}" -n +$2:0 $1
     else
-        "${EMACSCLIENT}" -n "$@"
+        "${EMACSCLIENT}" -a -n "$@"
     fi
 }
 
