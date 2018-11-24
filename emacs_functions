@@ -137,6 +137,6 @@ findEmacs()
 findEmacs
 unset findEmacs
 
-[[ -v DISPLAY ]] && [[ -v EMACS ]] && export EDITOR="${EMACSCLIENT} -n "
+[[ -v DISPLAY ]] && [[ -v EMACS ]] && export EDITOR="${EMACSCLIENT}"
 
 # --------------------------------------------------
