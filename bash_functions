@@ -40,111 +40,6 @@ cdsub()
 
 # --------------------------------------------------
 
-me()
-{
-    if [ ${OSTYPE} = "cygwin" ]; then
-        if [ -f /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32.exe ]; then
-            /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*") &
-        elif [ -f /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32.exe ]; then
-            /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*" ) &
-        else
-            echo "Cant find me executable in me() function"
-        fi
-    elif [ ${OSTYPE} = "linux-gnu" -o ${OSTYPE} = "linux" ]; then
-        local xyz="$*"
-        if [ "${xyz/-n}" != "${xyz}" -o "${DISPLAY}X" = "X" ]; then
-            command me -n "$@"
-        else
-            command me "$@" &
-        fi
-    else
-        echo "No such OSTYPE in me() function"
-    fi
-}
-
-# --------------------------------------------------
-
-findEmacs()
-{
-    [[ -v emacsExec ]] && return 0    # already set
-                             
-    local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
-
-    for e in ${listOfEmacsLocations} ; do
-        if [ -x "$e" ]; then
-            emacsExec="$e"
-            emacsClient="${e}client"
-            return 0
-        fi
-    done
-
-    echo "Unable to locate emacs executable in ${listOfEmacsLocations}" 1>&2
-    return 1
-}
-
-# --------------------------------------------------
-
-em()
-{
-    findEmacs
-    if [ "${OSTYPE}" = "cygwin" ]; then
-        # On cygwin, apparently emacs doesn't see INFOPATH so you can't
-        # "read the manual" from within emacs itself. But if I supply 
-        # INFOPATH directly on the command line invocation, then it works.
-        INFOPATH=$(cygpath -w -p "${INFOPATH}") "${emacsExec}" $(cygpath -i -w -- "$@" ) &
-    else
-        local xyz="$*"
-        if [ "${xyz/-nw }" != "${xyz}" ]; then
-            ${emacsExec} "$@"
-        elif [[ -v DISPLAY ]]; then
-            ${emacsExec} -fh "$@" &
-        else
-            ${emacsExec} -nw "$@"
-        fi
-    fi
-}
-
-# --------------------------------------------------
-
-emc()      # Emacsclient open in new frame
-{
-    findEmacs
-    ${emacsClient} -n -c -q "$@" &
-}
-
-# --------------------------------------------------
-
-emt()      # Emacsclient open within terminal
-{
-    findEmacs
-    ${emacsClient} -nw "$@"
-}
-
-# --------------------------------------------------
-
-ems()
-{
-    # Emacsclient opens file in an existing server process
-    local re='^[0-9]+$'
-
-    if [[ $2 =~ $re ]]; then
-        "${emacsClient}" -n +$2:0 $1
-    else
-        "${emacsClient}" -n "$@"
-    fi
-}
-
-# --------------------------------------------------
-
-emdaemon()
-{
-    findEmacs
-    rm -f ~/.emacs.desktop.lock ~/.emacs.d/.emacs.desktop.lock
-    (cd ~ && ${emacsExec} --daemon)
-}
-
-# --------------------------------------------------
-
 tree()
 {
     local tmpFile=/tmp/tree$$
@@ -232,7 +127,7 @@ envls ()
 envrm ()
 {
     if ! type -t deleteFromPath > /dev/null 2>&1; then
-        echo "Error: shell function deteFromPath() is undefined"
+        echo "[ERROR] shell function deteFromPath() is undefined"
         return 1
     fi
 
@@ -280,7 +175,6 @@ title()
 
 up ()
 {
-
     local ups=${1:-1}
     while [[ $ups -gt 0 ]] ; do
         local upstring="${upstring}../"

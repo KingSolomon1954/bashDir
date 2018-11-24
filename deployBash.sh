@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Need to run this from the .bashdir directory
 #
-# Can't import on first setups - chicken and egg
-# import won't yet be defined.
+# Can't import on first time setups - chicken and egg
+# import function won't yet be defined.
 #
 # ----------------------------------------------
 
@@ -29,25 +29,25 @@ symlinkFile ()
 # ----------------------------------------------
 
 # Preserve original .bashrc for reference
-if [ ! -L "$HOME/.bashrc" ]; then
-    if [ -e "$HOME/.bashrc" ]; then
-        mv "$HOME/.bashrc" "$HOME/.bashrc.org"
+if [ ! -L "${HOME}/.bashrc" ]; then
+    if [ -e "${HOME}/.bashrc" ]; then
+        mv "${HOME}/.bashrc" "${HOME}/.bashrc.org"
     fi
 fi
 
 # link    TARGET    LINK_NAME
-symlinkFile $(pwd)/bashrc $HOME/.bashrc
+symlinkFile $(pwd)/bashrc ${HOME}/.bashrc
 
 # ----------------------------------------------
 
 # Preserve original .bash_profile for reference
-if [ ! -L "$HOME/.bash_profile" ]; then
-    if [ -e "$HOME/.bash_profile" ]; then
-        mv "$HOME/.bash_profile" "$HOME/.bash_profile.org"
+if [ ! -L "${HOME}/.bash_profile" ]; then
+    if [ -e "${HOME}/.bash_profile" ]; then
+        mv "${HOME}/.bash_profile" "${HOME}/.bash_profile.org"
     fi
 fi
 
 # link    TARGET          LINK_NAME
-symlinkFile $(pwd)/bash_profile $HOME/.bash_profile
+symlinkFile $(pwd)/bash_profile ${HOME}/.bash_profile
 
 # ----------------------------------------------

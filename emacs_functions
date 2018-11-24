@@ -1,0 +1,142 @@
+# --------------------------------------------------
+#
+# Emacs Client Frame - Emacsclient opens and creates new frame
+
+emc()
+{
+    if [[ ! -v EMACSCLIENT ]]; then
+        echo "[ERROR] EMACSCLIENT undefined" 1>&2
+        return 1
+    fi
+    ${EMACSCLIENT} -n -c -q "$@" &
+}
+
+# --------------------------------------------------
+#
+# Emacs Terminal - Emacsclient opens within terminal
+# Yuk, avoid this one, my keybindings and terminal are
+# not totally sympatico
+
+emt()
+{
+    if [[ ! -v EMACSCLIENT ]]; then
+        echo "[ERROR] EMACSCLIENT undefined" 1>&2
+        return 1
+    fi
+    ${EMACSCLIENT} -nw "$@"
+}
+
+# --------------------------------------------------
+#
+# Emacs Server Attach - Emacsclient opens file attaching to
+# existing server process
+
+ems()
+{
+    if [[ ! -v EMACSCLIENT ]]; then
+        echo "[ERROR] EMACSCLIENT undefined" 1>&2
+        return 1
+    fi
+
+    local re='^[0-9]+$'
+
+    if [[ $2 =~ $re ]]; then
+        "${EMACSCLIENT}" -n +$2:0 $1
+    else
+        "${EMACSCLIENT}" -n "$@"
+    fi
+}
+
+# --------------------------------------------------
+#
+# Emacs Daemon -start it
+
+emdaemon()
+{
+    if [[ ! -v EMACS ]]; then
+        echo "[ERROR] EMACS undefined" 1>&2
+        return 1
+    fi
+    rm -f ~/.emacs.desktop.lock ~/.emacs.d/.emacs.desktop.lock
+    (cd ~ && ${EMACS} --daemon)
+}
+
+# --------------------------------------------------
+#
+# Emacs - the traditional way - no daemon
+
+em()
+{
+    if [[ ! -v EMACS ]]; then
+        echo "[ERROR] EMACS undefined" 1>&2
+        return 1
+    fi
+    
+    if [ "${OSTYPE}" = "cygwin" ]; then
+        # On cygwin, apparently emacs doesn't see INFOPATH so you can't
+        # "read the manual" from within emacs itself. But if I supply 
+        # INFOPATH directly on the command line invocation, then it works.
+        INFOPATH=$(cygpath -w -p "${INFOPATH}") "${EMACS}" $(cygpath -i -w -- "$@" ) &
+    else
+        local xyz="$*"
+        if [ "${xyz/-nw }" != "${xyz}" ]; then
+            ${EMACS} "$@"
+        elif [[ -v DISPLAY ]]; then
+            ${EMACS} -fh "$@" &
+        else
+            ${EMACS} -nw "$@"
+        fi
+    fi
+}
+
+# --------------------------------------------------
+#
+# JASSPA microemacs - mostly obsolete now
+
+me()
+{
+    if [ ${OSTYPE} = "cygwin" ]; then
+        if [ -f /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32.exe ]; then
+            /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*") &
+        elif [ -f /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32.exe ]; then
+            /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*" ) &
+        else
+            echo "Cant find me executable in me() function"
+        fi
+    elif [ ${OSTYPE} = "linux-gnu" -o ${OSTYPE} = "linux" ]; then
+        local xyz="$*"
+        if [ "${xyz/-n}" != "${xyz}" -o "${DISPLAY}X" = "X" ]; then
+            command me -n "$@"
+        else
+            command me "$@" &
+        fi
+    else
+        echo "No such OSTYPE in me() function"
+    fi
+}
+
+# --------------------------------------------------
+
+findEmacs()
+{
+    local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
+
+    for e in ${listOfEmacsLocations} ; do
+        if [ -x "$e" ]; then
+            EMACS="$e"
+            EMACSCLIENT="${e}client"
+            export EMACS
+            export EMACSCLIENT
+            return 0
+        fi
+    done
+}
+
+# --------------------------------------------------
+
+findEmacs
+unset findEmacs
+
+[[ -v DISPLAY ]] && [[ -v EMACS ]] && export EDITOR="${EMACSCLIENT} -n "
+
+# --------------------------------------------------
