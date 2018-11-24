@@ -1,146 +1,163 @@
-# Functions to implement a cd history capability
-
-# cdh       - display history buffer
-# cda [dir] - add directory <dir> to history buffer
-# cdd [n]   - delete directory <n> from history buffer
-# cdg [n]   - change to directory <n>
-# cdr [<filename>] - read history buffer from file
-# cdw [<filename>] - write history buffer to file
-
-# If <filename> is not given, then the default cd
-# history file $HOME/.cdhistory.cdh is used. If
-# <filename> is a "?", then all filenames in $HOME of
-# the form $HOME/.*.cdh are presented for the user to
-# choose from.
+# -----------------------------------------------------------------
+#
+# Functions that implement a cd history capability.
+# Allows easy CD'ing across a slew of remembered directories.
+#
+# Issue "cdl" to show a list of numbered directories. To cd
+# to a listed directory, issue "cdg <n>" where n corresponds to an item
+# on the list, or if n is not given then cd to the 1st item on the list.
+#
+#    cdl       - display list of saved directories
+#    cda [dir] - add <dir> to directory list [default is cur dir]
+#    cdd [n]   - delete dir <n> from directory list [default is 1]
+#    cdg [n]   - change to directory <n> [default is 1]
+#    cdw [<filename>] - save/write directory list to file
+#    cdr [<filename>] - init/read directory list from file
+#
+# If <filename> is not given, then filename defaults to
+# $HOME/.bashdir/cdhistory.cdh. If <filename> is a "?", then all
+# filenames matching $HOME/.bashdir/*.cdh are presented to you
+# to choose from.
+#
+# No arbitrary limit on size of list.
+# Source this file into the environment.
+#
+# Internally maintains a list of directories in typical PATH
+# format variable.
+#
+# -----------------------------------------------------------------
 
 declare -x CD_STACK=""
-
-# The while loop statements which are commented out are
-# ksh syntax.
 
 # -----------------------------------------------------------------
 
 cdg()
 {
-    if [ -z "$CD_STACK" ]; then
+    if [ -z "${CD_STACK}" ]; then
         echo "CD history is empty"
         return 1
     fi
-    entry=${1:-1}                    # use value of 1 if no arg 1
-    t_stack=$CD_STACK:
-    let count=1
-#    while [ -n "$t_stack" ] && ((count < $1)); do
-    while [ -n "$t_stack" ] && [ $count -lt $entry ]; do
-        t_stack=${t_stack#*:}
-        let count=count+1
+    local arg1=${1:-1}         # use value of 1 if no arg 1
+    local stack="${CD_STACK}:"
+    declare -i count=1
+    while [ -n "${stack}" ] && [ ${count} -lt ${arg1} ]; do
+        stack="${stack#*:}"
+        let count+=1
     done
-    if [ -z "$t_stack" ]; then		# gone too far, bail out
+    if [ -z "${stack}" ]; then		# gone too far, bail out
         echo "CD history $1 does not exist"
         return 1
     fi
-    cd "${t_stack%%:*}"
+    cd "${stack%%:*}"
 }
 
 # -----------------------------------------------------------------
 
-cdh()
+cdl()
 {
-    if [ -z "$CD_STACK" ]; then
+    if [ -z "${CD_STACK}" ]; then
         echo "CD history is empty"
     else
-        t_stack=$CD_STACK:
-        let count=1
-        while entry=${t_stack%%:*}; [ -n "$t_stack" ]; do
-            echo "$count $entry"
-            let count=count+1
-            t_stack=${t_stack#*:}
+        local stack="${CD_STACK}:"
+        declare -i count=1
+        local entry
+        while entry="${stack%%:*}"; [ -n "${stack}" ]; do
+            echo "${count} ${entry}"
+            let count+=1
+            stack="${stack#*:}"
         done
     fi
 }
 
 # -----------------------------------------------------------------
-
-cda()		# add specified or current directory to CD history
+#
+# Add specified or current directory to CD history
+#
+cda()
 {
-    dir_name=${1:-$(pwd)}
-    if [ -d "$dir_name" ] && [ -x "$dir_name" ]; then
-        if [ -z "$CD_STACK" ]; then
-            CD_STACK=$dir_name
+    local dir_name="${1:-$(pwd)}"
+    if [ -d "${dir_name}" ] && [ -x "${dir_name}" ]; then
+        if [ -z "${CD_STACK}" ]; then
+            CD_STACK="${dir_name}"
         else
-            CD_STACK=$dir_name:$CD_STACK
+            CD_STACK="${dir_name}:${CD_STACK}"
         fi
     else
-        echo "Trouble reading directory: $dir_name"
+        echo "Trouble reading directory: ${dir_name}"
         return 1
     fi
 
-    t_stack=$CD_STACK:
-    let count=0
-    new_stack=""
-#    while entry=${t_stack%%:*}; [ -n "$t_stack" ] && ((count < 20 )) ; do
-    while entry=${t_stack%%:*}; [ -n "$t_stack" ] && [ $count -lt 20 ] ; do
-        if [ -z "$new_stack" ]; then
-            new_stack=$entry
+    local stack="${CD_STACK}:"
+    declare -i count=0
+    local new_stack=""
+    local entry
+    while entry="${stack%%:*}"; [ -n "${stack}" ] ; do
+        if [ -z "${new_stack}" ]; then
+            new_stack="${entry}"
         else
-            new_stack=$new_stack:$entry
+            new_stack="${new_stack}:${entry}"
         fi
-        t_stack=${t_stack#*:}
-        let count=count+1
+        stack="${stack#*:}"
+        let count+=1
     done
-    CD_STACK=$new_stack
+    CD_STACK="${new_stack}"
 }
 
 # -----------------------------------------------------------------
-
+#
+# An arg of 0 is treated same as 1.
+#
 cdd()
 {
-    t_stack=$CD_STACK:
-    let count=1
-    new_stack=""
-#    while entry=${t_stack%%:*}; [ -n "$t_stack" ] && ((count < $1)); do
-    while entry=${t_stack%%:*}; [ -n "$t_stack" ] && [ $count -lt $1 ]; do
-        if [ -z "$new_stack" ]; then
-            new_stack=$entry
+    local stack=${CD_STACK}:
+    local new_stack=""
+    declare -i count=1
+    declare -i arg1=${1:-1}        # use value of 1 if no arg 1
+    local entry
+    while entry="${stack%%:*}"; [ -n "${stack}" ] && [ ${count} -lt ${arg1} ]; do
+        if [ -z "${new_stack}" ]; then
+            new_stack="${entry}"
         else
-            new_stack=$new_stack:$entry
+            new_stack="${new_stack}:${entry}"
         fi
-        t_stack=${t_stack#*:}
-        let count=count+1
+        stack="${stack#*:}"
+        let count+=1
     done
-    if [ -z "$t_stack" ]; then		# at EOS, bail out
-       CD_STACK=$new_stack
+    if [ -z "${stack}" ]; then          # at EOS, bail out
        return 1
     fi
-    t_stack=${t_stack#*:}		# delete one more
-    CD_STACK=$new_stack:${t_stack%:}
-    CD_STACK=${CD_STACK%:}		# possible trailing or
-    CD_STACK=${CD_STACK#:}		# leading colon.
+    stack="${stack#*:}"                 # delete one more
+    CD_STACK="${new_stack}:${stack%:}"
+    CD_STACK="${CD_STACK%:}"            # possible trailing or
+    CD_STACK="${CD_STACK#:}"            # leading colon.
 }
 
 # -----------------------------------------------------------------
 
 cdw()
 {
-    if [ -z "$CD_STACK" ]; then
+    if [ -z "${CD_STACK}" ]; then
         echo "CD history is empty"
     else
-        defaultHistFile=${HOME}/.bashdir/cdhistory.cdh
-        histFile=${1:-${defaultHistFile}}
+        local defaultHistFile="${HOME}/.bashdir/cdhistory.cdh"
+        local histFile=${1:-${defaultHistFile}}
         if [ "${histFile}" = "?" ]; then
             PS3='Which CD history file? '
+            local f
             select f in ${HOME}/.bashdir/*.cdh; do
                if [ -n "${f}" ]; then
-                   histFile=${f}
+                   histFile="${f}"
                    break;
                fi
             done
         fi
-        rm -f ${histFile}
+        rm -f "${histFile}"
 
-        t_stack=$CD_STACK:
-        while entry=${t_stack%%:*}; [ -n "$t_stack" ]; do
-            echo "$entry" >> ${histFile}
-            t_stack=${t_stack#*:}
+        local stack=$CD_STACK:
+        local entry
+        while entry="${stack%%:*}"; [ -n "${stack}" ]; do
+            echo "${entry}" >> "${histFile}"
+            stack="${stack#*:}"
         done
     fi
 }
@@ -149,30 +166,32 @@ cdw()
 
 cdr()
 {
-    defaultHistFile=${HOME}/.bashdir/cdhistory.cdh
-    histFile=${1:-${defaultHistFile}}
+    local defaultHistFile="${HOME}/.bashdir/cdhistory.cdh"
+    local histFile="${1:-${defaultHistFile}}"
     if [ "${histFile}" = "?" ]; then
         PS3='Which CD history file? '
+        local f
         select f in ${HOME}/.bashdir/*.cdh; do
            if [ -n "${f}" ]; then
-               histFile=${f}
+               histFile="${f}"
                break;
             fi
         done
     fi
-    if [ ! -f ${histFile} ]; then
+    if [ ! -f "${histFile}" ]; then
         echo "No CD history file: ${histFile}"
         return 1
     fi
 
     CD_STACK=""
+    local entry
     while read entry; do
         if [ -z "${CD_STACK}" ]; then
-            CD_STACK=${entry}
+            CD_STACK="${entry}"
         else
-            CD_STACK=${CD_STACK}:${entry}
+            CD_STACK="${CD_STACK}:${entry}"
         fi
-    done < ${histFile}
+    done < "${histFile}"
 }
 
 # -----------------------------------------------------------------
