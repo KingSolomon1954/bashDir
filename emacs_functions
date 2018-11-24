@@ -1,10 +1,18 @@
+
+# The following is the preferred way to test for variable existence in
+# bash, but -v doesn't exist yet in cygwin version of bash, so this file
+# for now uses old style.
+#
+# Preferred:  if [[ ! -v EMACSCLIENT ]]; then
+# Old style:  if [[ -z "${EMACSCLIENT}" ]]; then
+#
 # --------------------------------------------------
 #
 # Emacs Client Frame - Emacsclient opens and creates new frame
 
 emc()
 {
-    if [[ ! -v EMACSCLIENT ]]; then
+    if [[ -z "${EMACSCLIENT}" ]]; then
         echo "[ERROR] EMACSCLIENT undefined" 1>&2
         return 1
     fi
@@ -19,7 +27,7 @@ emc()
 
 emt()
 {
-    if [[ ! -v EMACSCLIENT ]]; then
+    if [[ -z "${EMACSCLIENT}" ]]; then
         echo "[ERROR] EMACSCLIENT undefined" 1>&2
         return 1
     fi
@@ -33,7 +41,7 @@ emt()
 
 ems()
 {
-    if [[ ! -v EMACSCLIENT ]]; then
+    if [[ -z "${EMACSCLIENT}" ]]; then
         echo "[ERROR] EMACSCLIENT undefined" 1>&2
         return 1
     fi
@@ -53,7 +61,7 @@ ems()
 
 emdaemon()
 {
-    if [[ ! -v EMACS ]]; then
+    if [[ -z "${EMACS}" ]]; then
         echo "[ERROR] EMACS undefined" 1>&2
         return 1
     fi
@@ -67,7 +75,7 @@ emdaemon()
 
 em()
 {
-    if [[ ! -v EMACS ]]; then
+    if [[ -z "${EMACS}" ]]; then
         echo "[ERROR] EMACS undefined" 1>&2
         return 1
     fi
@@ -81,7 +89,7 @@ em()
         local xyz="$*"
         if [ "${xyz/-nw }" != "${xyz}" ]; then
             ${EMACS} "$@"
-        elif [[ -v DISPLAY ]]; then
+        elif [[ -z "${DISPLAY}" ]]; then
             ${EMACS} -fh "$@" &
         else
             ${EMACS} -nw "$@"
@@ -137,6 +145,10 @@ findEmacs()
 findEmacs
 unset findEmacs
 
-[[ -v DISPLAY ]] && [[ -v EMACS ]] && export EDITOR="${EMACSCLIENT}"
+# Set EDITOR environment var. But cygwin has no emacslient
+if [[ "${TESTABLE_OSTYPE}" != "cygwin" ]]; then
+    [[ -n "${DISPLAY}" ]] && [[ -n "${EMACS}" ]] && export EDITOR="${EMACSCLIENT}"
+#   [[ -v DISPLAY ]] && [[ -v EMACS ]] && export EDITOR="${EMACSCLIENT}"
+fi
 
 # --------------------------------------------------
