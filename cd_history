@@ -39,7 +39,7 @@ cdg()
     fi
     local arg1=${1:-1}         # use value of 1 if no arg 1
     local stack="${CD_STACK}:"
-    declare -i count=1
+    local -i count=1
     while [ -n "${stack}" ] && [ ${count} -lt ${arg1} ]; do
         stack="${stack#*:}"
         let count+=1
@@ -59,7 +59,7 @@ cdl()
         echo "CD history is empty"
     else
         local stack="${CD_STACK}:"
-        declare -i count=1
+        local -i count=1
         local entry
         while entry="${stack%%:*}"; [ -n "${stack}" ]; do
             echo "${count} ${entry}"
@@ -88,7 +88,7 @@ cda()
     fi
 
     local stack="${CD_STACK}:"
-    declare -i count=0
+    local -i count=0
     local new_stack=""
     local entry
     while entry="${stack%%:*}"; [ -n "${stack}" ] ; do
@@ -111,8 +111,8 @@ cdd()
 {
     local stack=${CD_STACK}:
     local new_stack=""
-    declare -i count=1
-    declare -i arg1=${1:-1}        # use value of 1 if no arg 1
+    local -i count=1
+    local -i arg1=${1:-1}        # use value of 1 if no arg 1
     local entry
     while entry="${stack%%:*}"; [ -n "${stack}" ] && [ ${count} -lt ${arg1} ]; do
         if [ -z "${new_stack}" ]; then
