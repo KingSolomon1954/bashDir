@@ -90,9 +90,9 @@ em()
         if [ "${xyz/-nw }" != "${xyz}" ]; then
             ${EMACS} "$@"
         elif [[ -z "${DISPLAY}" ]]; then
-            ${EMACS} -fh "$@" &
-        else
             ${EMACS} -nw "$@"
+        else
+            ${EMACS} -fh "$@" &
         fi
     fi
 }
