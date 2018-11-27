@@ -76,31 +76,15 @@ cdl()
 cda()
 {
     local dir_name="${1:-$(pwd)}"
-    if [ -d "${dir_name}" ] && [ -x "${dir_name}" ]; then
-        if [ -z "${CD_STACK}" ]; then
-            CD_STACK="${dir_name}"
-        else
-            CD_STACK="${dir_name}:${CD_STACK}"
-        fi
-    else
-        echo "Trouble reading directory: ${dir_name}"
+    [[ ${dir_name} = "." ]] && dir_name="$(pwd)"
+    if [ ! -d "${dir_name}" ] || [ ! -x "${dir_name}" ]; then
+        echo "No such directory o: ${dir_name}"
         return 1
     fi
-
-    local stack="${CD_STACK}:"
-    local -i count=0
-    local new_stack=""
-    local entry
-    while entry="${stack%%:*}"; [ -n "${stack}" ] ; do
-        if [ -z "${new_stack}" ]; then
-            new_stack="${entry}"
-        else
-            new_stack="${new_stack}:${entry}"
-        fi
-        stack="${stack#*:}"
-        let count+=1
-    done
-    CD_STACK="${new_stack}"
+    
+    CD_STACK="${dir_name}:${CD_STACK}"
+    CD_STACK="${CD_STACK%:}"   # drop possible trailing ":"
+    return 0
 }
 
 # -----------------------------------------------------------------
