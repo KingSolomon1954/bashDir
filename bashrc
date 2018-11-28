@@ -32,9 +32,7 @@ _bd="${HOME}/.bashdir"
 
 # --------------------------------------------------
 
-# Include cd history features after cd alias is defined.
-
-[[ -f ${_bd}/cd_history ]] && source ${_bd}/cd_history
+[[ -f ${_bd}/cdlist.sh ]] && source ${_bd}/cdlist.sh
 
 # --------------------------------------------------
 
