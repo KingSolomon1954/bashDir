@@ -28,30 +28,9 @@
 declare -a CD_LIST
 
 # -----------------------------------------------------------------
-
-_isCdListEmpty()
-{
-    if [[ ${#CD_LIST[@]} = 0 ]]; then
-        echo "CD list is empty"
-        return 0      # return true
-    fi
-    return 1          # return false
-
-}
-
-# -----------------------------------------------------------------
-
-_isCdListArgValid()
-{
-    if [[ $1 -lt 1 ]] || [[ $1 -gt ${#CD_LIST[@]} ]]; then
-        echo "No such element: $arg1"
-        return 1      # return false
-    fi
-    return 0          # return true
-}
-
-# -----------------------------------------------------------------
-
+#
+# cd list. List out remembered directories
+#
 cdl()
 {
     if _isCdListEmpty; then return; fi
@@ -65,7 +44,7 @@ cdl()
 
 # -----------------------------------------------------------------
 #
-# Add specified or current directory to CD list
+# cd add. Add specified or current directory to CD list.
 #
 cda()
 {
@@ -82,22 +61,23 @@ cda()
 }
 
 # -----------------------------------------------------------------
-
+#
+# cd delete. Removed first or specified directory.
+#
 cdd()
 {
     if _isCdListEmpty; then return; fi
     
-    local -i arg1=${1:-1}              # use value of 1 if no arg 1
-    if ! _isCdListArgValid $arg1; then
+    local -i arg1=${1:-1}              # if no arg then use value of 1 
+    if ! _isCdListArgValid ${arg1}; then
         return
     fi
-    
-    local -i idx=$arg1-1               # zero based indexing
-    local -a tArray=( ${CD_LIST[@]} )  # work with a copy
-    tArray[$idx]=":"                   # mark for deletion
 
-    local -i cnt=0
+    local -a tArray=( ${CD_LIST[@]} )  # work with a copy
+    tArray[ (( arg1-1 )) ]=":"         # mark for deletion, zero based
+
     CD_LIST=()                         # Empty it
+    local -i cnt=0
     for i in "${tArray[@]}"; do        # Reconstruct it
         [[ "$i" = ":" ]] && continue
         CD_LIST[$cnt]="$i"
@@ -106,7 +86,9 @@ cdd()
 }
 
 # -----------------------------------------------------------------
-
+#
+# cd goto. Go to first or specified directory.
+#
 cdg()
 {
     if _isCdListEmpty; then return; fi
@@ -115,9 +97,69 @@ cdg()
     if ! _isCdListArgValid $arg1; then
         return
     fi
+    cd "${CD_LIST[ (( arg1-1 )) ]}"    # zero based
+}
+
+# -----------------------------------------------------------------
+#
+# cd write. Write out remembered directories to a file.
+#
+cdw()
+{
+    if _isCdListEmpty; then return; fi
+
+    local f="$(_whichCdListFile $1)"
+
+    rm -f "${f}"
+    for entry in "${CD_LIST[@]}"; do 
+        echo "${entry}" >> "${f}"
+    done
+    echo "Wrote file: ${f}"
+}
+
+# -----------------------------------------------------------------
+#
+# cd read. Read in remembered directories from a file.
+#
+cdr()
+{
+    local f="$(_whichCdListFile $1)"
     
-    local -i idx=$arg1-1               # zero based indexing
-    cd "${CD_LIST[$idx]}"
+    if [ ! -f "${f}" ]; then
+        echo "No CD list file: ${f}"
+        return 1
+    fi
+
+    CD_LIST=()
+    local -i cnt=0
+    local entry
+    while read entry; do
+        CD_LIST[$cnt]="${entry}"
+        (( cnt++ ))
+    done < "${f}"
+}
+
+# -----------------------------------------------------------------
+
+_isCdListEmpty()
+{
+    if [[ ${#CD_LIST[@]} = 0 ]]; then
+        echo "CD list is empty"
+        return 0      # return true
+    fi
+    return 1          # return false
+
+}
+
+# -----------------------------------------------------------------
+
+_isCdListArgValid()
+{
+    if (( $1 < 1  )) || (( $1 > ${#CD_LIST[@]} )); then
+        echo "No such element: $1"
+        return 1      # return false
+    fi
+    return 0          # return true
 }
 
 # -----------------------------------------------------------------
@@ -137,41 +179,6 @@ _whichCdListFile()
         done
     fi
     echo "${listFile}"
-}
-
-# -----------------------------------------------------------------
-
-cdw()
-{
-    if _isCdListEmpty; then return; fi
-
-    local f="$(_whichCdListFile $1)"
-
-    rm -f "${f}"
-    for entry in "${CD_LIST[@]}"; do 
-        echo "${entry}" >> "${f}"
-    done
-    echo "Wrote file: ${f}"
-}
-
-# -----------------------------------------------------------------
-
-cdr()
-{
-    local f="$(_whichCdListFile $1)"
-    
-    if [ ! -f "${f}" ]; then
-        echo "No CD list file: ${f}"
-        return 1
-    fi
-
-    CD_LIST=()
-    local -i cnt=0
-    local entry
-    while read entry; do
-        CD_LIST[$cnt]="${entry}"
-        (( cnt++ ))
-    done < "${f}"
 }
 
 # -----------------------------------------------------------------
