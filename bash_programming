@@ -26,10 +26,10 @@ if type -t p4 > /dev/null; then
 fi
 
 if [ "${TESTABLE_OSTYPE}" = "cygwin" ]; then
-    appendToPath "${HOME}/pkg/android-sdk/tools"
-    appendToPath "${HOME}/pkg/android-sdk/platform-tools"
+    appendToPath "${HOME}/opt/android-sdk/tools"
+    appendToPath "${HOME}/opt/android-sdk/platform-tools"
 
-    export ANT_HOME="${HOME}/pkg/apache-ant-1.9.4"
+    export ANT_HOME="${HOME}/opt/apache-ant-1.9.4"
     appendToPath "${ANT_HOME}/bin"
 
     export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_60"

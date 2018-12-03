@@ -127,7 +127,7 @@ me()
 
 findEmacs()
 {
-    local listOfEmacsLocations="${HOME}/pkg/emacs-24.3/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
+    local listOfEmacsLocations="${HOME}/bin/emacs /usr/local/bin/emacs /usr/bin/emacs"
 
     for e in ${listOfEmacsLocations} ; do
         if [ -x "$e" ]; then
