@@ -50,6 +50,11 @@ elif [ "${TESTABLE_OSTYPE}" = "linux" ]; then
     alias  m='make TGT=linux-x86_64'
     alias md='make TGT=linux-x86_64 CXXDEBUG="-ggdb -DGDEBUG"'
     alias mo="make TGT=linux-x86_64 CXXDEBUG=\"-O3 -DNDEBUG\""
+    export NODEJS_HOME="/opt/nodejs/node-v10.15.1/bin"
+    appendToPath $NODEJS_HOME
+    if [ ! -d ${NODEJS_HOME} ]; then
+        unset NODEJS_HOME
+    fi
 elif [ "${TESTABLE_OSTYPE}" = "darwin" ]; then
     alias  m='make TGT=linux-x86_64'
     alias md='make TGT=linux-x86_64 CXXDEBUG="-ggdb -DGDEBUG"'
