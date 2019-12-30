@@ -71,3 +71,5 @@ fi
 if [ -f /Applications/Perforce/p4merge.app/Contents/MacOS/p4merge ]; then
     alias gdiff="/Applications/Perforce/p4merge.app/Contents/MacOS/p4merge"
 fi
+
+alias glog="git log --all --oneline --decorate --graph"
