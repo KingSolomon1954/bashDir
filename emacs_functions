@@ -148,8 +148,8 @@ unset findEmacs
 # Set EDITOR environment var. But cygwin has no emacslient
 if [[ "${TESTABLE_OSTYPE}" != "cygwin" ]]; then
     if [[ -n "${DISPLAY}" ]] && [[ -n "${EMACS}" ]]; then
-        export EDITOR="${EMACSCLIENT} -t"
-        export VISUAL="${EMACSCLIENT} -n -c -q"
+        export EDITOR="${EMACSCLIENT} -c -q"
+        export VISUAL="${EMACSCLIENT} -c -q"
     fi
 fi
 
