@@ -43,7 +43,7 @@ cdsub()
 tree()
 {
     local tmpFile=/tmp/tree$$
-    find . -type d -print > ${tmpFile}
+    find . -type d -not -path "*.git*" -print  > ${tmpFile}
     local topDir=$(pwd)
     trap 'rm -f ${tmpFile}; cd ${topDir}' 2 15
     while read dir; do
