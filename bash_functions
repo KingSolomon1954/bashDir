@@ -71,8 +71,8 @@ tree()
 
 start()	# run command in background, redirect std out/error
 {
-    if [ -d ~/log ]; then
-        local logDir=~/log
+    if [ -d ~/admin/logs ]; then
+        local logDir=~/admin/logs
     elif [ -d ~/tmp ]; then
         local logDir=~/tmp
     else
