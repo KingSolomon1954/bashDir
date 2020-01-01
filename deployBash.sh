@@ -15,7 +15,7 @@ symlinkFile ()
 
     if [ ! -L "${linkName}" ]; then
         if [ -e "${linkName}" ]; then
-            echo "[ERROR] ${linkName} exists but it's not a symlink. Please fix that manually" && exit 1
+            echo "[ERROR] ${linkName} already exists as a file" && return 1
         else
             echo ln -s "${target}" "${linkName}"
                  ln -s "${target}" "${linkName}"
