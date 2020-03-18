@@ -23,11 +23,10 @@ appendToPath   "/opt/apache-maven-3.5.2/bin"
 prependToPath  "/usr/local/opt/openssl/bin"
 prependToPath  "/usr/local/opt/findutils/libexec/gnubin"
 prependToPath  "/usr/local/opt/coreutils/libexec/gnubin"
+prependToPath  "/usr/local/opt/grep/libexec/gnubin"
 appendToPath   "/opt/apache-maven-3.5.2/bin"
 
 deleteFromPath "/usr/games"
 deleteFromPath "/usr/local/games"
 
-appendToPath   "${HOME}/man"                 MANPATH
-appendToPath   "${HOME}/info"                INFOPATH
-appendToPath   "${HOME}/pkg/emacs-24.3/info" INFOPATH
+appendToPath   "${HOME}/man"                                     MANPATH

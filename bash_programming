@@ -62,12 +62,31 @@ elif [ "${TESTABLE_OSTYPE}" = "darwin" ]; then
     if [ -d /Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home ]; then
         export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home
     fi
+    if [ -f /Applications/Perforce/p4merge.app/Contents/MacOS/p4merge ]; then
+        alias gdiff="/Applications/Perforce/p4merge.app/Contents/MacOS/p4merge"
+    fi
+
+    if [ -f /Applications/p4merge.app/Contents/MacOS/p4merge ]; then
+        alias gdiff="/Applications/p4merge.app/Contents/MacOS/p4merge"
+        alias p4merge="/Applications/p4merge.app/Contents/MacOS/p4merge"
+    fi
 else
     echo "Unhandled TESTABLE_OSTYPE in file: bash_programming"
 fi
 
 # -----------------------------------------------------------
 
-if [ -f /Applications/Perforce/p4merge.app/Contents/MacOS/p4merge ]; then
-    alias gdiff="/Applications/Perforce/p4merge.app/Contents/MacOS/p4merge"
-fi
+# Bash Completions
+sourceIt ()
+{
+    if [ -f $1 ]; then
+        source $1
+    fi
+}
+
+sourceIt /usr/local/etc/bash_completion.d/git-completion.bash
+sourceIt /usr/local/etc/bash_completion.d/brew
+
+unset sourceIt
+
+# -----------------------------------------------------------
