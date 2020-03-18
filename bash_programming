@@ -90,3 +90,5 @@ sourceIt /usr/local/etc/bash_completion.d/brew
 unset sourceIt
 
 # -----------------------------------------------------------
+
+alias glog="git log --all --oneline --decorate --graph"

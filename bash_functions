@@ -43,7 +43,7 @@ cdsub()
 tree()
 {
     local tmpFile=/tmp/tree$$
-    find . -type d -print > ${tmpFile}
+    find . -type d -not -path "*.git*" -print  > ${tmpFile}
     local topDir=$(pwd)
     trap 'rm -f ${tmpFile}; cd ${topDir}' 2 15
     while read dir; do
@@ -71,8 +71,8 @@ tree()
 
 start()	# run command in background, redirect std out/error
 {
-    if [ -d ~/log ]; then
-        local logDir=~/log
+    if [ -d ~/admin/logs ]; then
+        local logDir=~/admin/logs
     elif [ -d ~/tmp ]; then
         local logDir=~/tmp
     else
