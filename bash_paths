@@ -24,9 +24,9 @@ prependToPath  "/usr/local/opt/openssl/bin"
 prependToPath  "/usr/local/opt/findutils/libexec/gnubin"
 prependToPath  "/usr/local/opt/coreutils/libexec/gnubin"
 prependToPath  "/usr/local/opt/grep/libexec/gnubin"
-appendToPath   "/opt/apache-maven-3.5.2/bin"
+appendToPath   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 deleteFromPath "/usr/games"
 deleteFromPath "/usr/local/games"
 
-appendToPath   "${HOME}/man"                                     MANPATH
+appendToPath   "${HOME}/man"       MANPATH
