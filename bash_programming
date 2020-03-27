@@ -32,7 +32,6 @@ alias mo="make TGT=cygwin-x86 CXXDEBUG=\"-O3 -DNDEBUG\""
 if [ "${TESTABLE_OSTYPE}" = "cygwin" ]; then
     appendToPath "${HOME}/opt/android-sdk/tools"
     appendToPath "${HOME}/opt/android-sdk/platform-tools"
-
     export ANT_HOME="${HOME}/opt/apache-ant-1.9.4"
     appendToPath "${ANT_HOME}/bin"
     if [ ! -d ${ANT_HOME} ]; then
@@ -42,7 +41,7 @@ if [ "${TESTABLE_OSTYPE}" = "cygwin" ]; then
     export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_60"
     # Needs to precede windows/system/java.exe
     prependToPath "${JAVA_HOME}/bin"
-    if [ ! -d ${JAVA_HOME} ]; then
+    if [ ! -d "${JAVA_HOME}" ]; then
         unset JAVA_HOME
     fi
 
@@ -53,6 +52,7 @@ if [ "${TESTABLE_OSTYPE}" = "cygwin" ]; then
             PWD=$(cygpath -aw .) command p4 "$@"
         }
     fi
+    
 elif [ "${TESTABLE_OSTYPE}" = "linux" ]; then
     export NODEJS_HOME="/opt/nodejs/node-v10.15.1/bin"
     appendToPath $NODEJS_HOME

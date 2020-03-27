@@ -48,7 +48,8 @@ for i in ${t_infoDirs}; do
         t_infoDirsReal+=" -d $i"
     fi
 done
-if [ -v t_infoDirsReal ]; then
+
+if [ "${t_infoDirsReal}" != ""  ]; then
     alias info="command info ${t_infoDirsReal}"
 fi
 unset -v t_infoDirs
