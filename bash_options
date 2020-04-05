@@ -1,10 +1,6 @@
-if [ ${USER} = "hsolomon" -o ${USER?} = "howie" ]; then
-    # White text on blue highlight
-    PS1="\e[0m\e[44m\u@\h:\w>\e[0m\n"
-else
-    # Black text on green highlight
-    PS1="\e[30m\e[42m\u@\h:\w>\e[0m\n"
-fi
+# Dark test, light blue background
+# See https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+PS1="\e[38;5;16;48;5;23m\u@\h:\w>\e[0m\n"
 
 set completion-ignore-case on
 #       If set to On, readline performs filename matching and completion

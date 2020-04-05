@@ -161,11 +161,17 @@ envrm ()
 
 title()
 {
-    case "$TERM" in
-    *term* | rxvt)
-        echo -en  "\e]0;$*\a" ;;
-    *)  ;;
-    esac
+    if [[ -z "$ORIG_PS1" ]]; then
+        ORIG_PS1="$PS1"
+    fi
+    TITLE="\[\e]2;$*\a\]"
+    PS1="${ORIG_PS1}${TITLE}"
+
+#    case "$TERM" in
+#    *term* | rxvt)
+#        echo -en  "\e]0;$*\a" ;;
+#    *)  ;;
+#    esac
 }
 
 # --------------------------------------------------
