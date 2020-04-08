@@ -22,7 +22,9 @@ if [ "${TESTABLE_OSTYPE}" = "cygwin" ]; then
     alias startx='startxwinhowie > ${HOME}/log/startx.log 2>&1'
     export DISPLAY=:0
 elif [ "${TESTABLE_OSTYPE}" = "linux" ]; then
-    :
+    if type -p xdg-open > /dev/null; then
+        alias open=xdg-open
+    fi
 elif [ "${TESTABLE_OSTYPE}" = "darwin" ]; then
     :
 else
