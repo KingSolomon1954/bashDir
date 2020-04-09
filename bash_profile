@@ -9,7 +9,7 @@
 
 # Setup PATHs
 
-[[ -f ${HOME}/.bashdir/bash_paths ]] && source ${HOME}/.bashdir/bash_paths
+[[ -f ${HOME}/.bashdir/path_setup.bash ]] && source ${HOME}/.bashdir/path_setup.bash
 
 # Now we source .bashrc. The .bashrc contains stuff
 # we want for all interactive shells. This login shell

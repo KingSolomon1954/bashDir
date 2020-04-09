@@ -1,4 +1,7 @@
-
+# --------------------------------------------------
+#
+# Setup for emacs
+#
 # The following is the preferred way to test for variable existence in
 # bash, but -v doesn't exist yet in cygwin version of bash, so this file
 # for now uses old style.
@@ -80,7 +83,7 @@ em()
         return 1
     fi
     
-    if [ "${OSTYPE}" = "cygwin" ]; then
+    if isCygwin; then
         # On cygwin, apparently emacs doesn't see INFOPATH so you can't
         # "read the manual" from within emacs itself. But if I supply 
         # INFOPATH directly on the command line invocation, then it works.
@@ -103,7 +106,7 @@ em()
 
 me()
 {
-    if [ ${OSTYPE} = "cygwin" ]; then
+    if isCygwin; then
         if [ -f /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32.exe ]; then
             /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*") &
         elif [ -f /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32.exe ]; then
@@ -111,7 +114,7 @@ me()
         else
             echo "Cant find me executable in me() function"
         fi
-    elif [ ${OSTYPE} = "linux-gnu" -o ${OSTYPE} = "linux" ]; then
+    elif isLinux; then
         local xyz="$*"
         if [ "${xyz/-n}" != "${xyz}" -o "${DISPLAY}X" = "X" ]; then
             command me -n "$@"
@@ -119,7 +122,7 @@ me()
             command me "$@" &
         fi
     else
-        echo "No such OSTYPE in me() function"
+        echo "Unavailable for unknown OS"
     fi
 }
 
@@ -146,7 +149,8 @@ findEmacs
 unset findEmacs
 
 # Set EDITOR environment var. But cygwin has no emacslient
-if [[ "${TESTABLE_OSTYPE}" != "cygwin" ]]; then
+
+if ! isCygwin; then
     if [[ -n "${DISPLAY}" ]] && [[ -n "${EMACS}" ]]; then
         export EDITOR="${EMACSCLIENT} -c -q"
         export VISUAL="${EMACSCLIENT} -c -q"

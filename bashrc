@@ -12,44 +12,42 @@
 #
 [[ "$-" != *i* ]] && return
 
+# --------------------------------------------------
+
+sourceIt ()
+{
+    if [ -f $1 ]; then
+        source $1
+    fi
+}
+
+# --------------------------------------------------
+
 _bd="${HOME}/.bashdir"
 
-# --------------------------------------------------
-
-[[ -f "${_bd}/bash_options" ]] && source "${_bd}/bash_options"
-
-# --------------------------------------------------
-
-[[ -f ~/.bashdir/bash_aliases ]] && source "${_bd}/bash_aliases"
-
-# --------------------------------------------------
-
-[[ -f ${_bd}/bash_functions ]] && source ${_bd}/bash_functions
-
-# --------------------------------------------------
-
-[[ -f ${_bd}/emacs_functions ]] && source ${_bd}/emacs_functions
-
-# --------------------------------------------------
-
-[[ -f ${_bd}/cdlist.sh ]] && source ${_bd}/cdlist.sh
-
-# --------------------------------------------------
-
-[[ -f ${_bd}/my_dir_colors ]] && eval "$(dircolors -b ${_bd}/my_dir_colors)"
-
-# --------------------------------------------------
-
-[[ -f ${_bd}/bash_programming ]] && source ${_bd}/bash_programming
-
-# --------------------------------------------------
-
-[[ -f ${_bd}/bash_${TESTABLE_OSTYPE} ]] && source ${_bd}/bash_${TESTABLE_OSTYPE}
-
-unset TESTABLE_OSTYPE
+sourceIt "${_bd}/os_setup.bash"
+sourceIt "${_bd}/command_line.bash"
+sourceIt "${_bd}/history.bash"
+sourceIt "${_bd}/directory_ops.bash"
+sourceIt "${_bd}/file_ops.bash"
+sourceIt "${_bd}/cdlist.bash"
+sourceIt "${_bd}/less_ops.bash"
+sourceIt "${_bd}/env_ops.bash"
+sourceIt "${_bd}/info_ops.bash"
+sourceIt "${_bd}/man_ops.bash"
+sourceIt "${_bd}/bash_scripting.bash"
+sourceIt "${_bd}/emacs_setup.bash"
+sourceIt "${_bd}/perforce_setup.bash"
+sourceIt "${_bd}/git_setup.bash"
+sourceIt "${_bd}/c++_setup.bash"
+sourceIt "${_bd}/java_setup.bash"
+sourceIt "${_bd}/ant_setup.bash"
+sourceIt "${_bd}/maven_setup.bash"
+sourceIt "${_bd}/nodejs_setup.bash"
+sourceIt "${_bd}/vsc_setup.bash"
+sourceIt "${_bd}/android_setup.bash"
 
 # --------------------------------------------------
 
 unset _bd
-
-# end file
+unset sourceIt

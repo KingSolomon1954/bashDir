@@ -1,22 +1,6 @@
-# Dark test, light blue background
-# See https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
-PS1="\e[38;5;16;48;5;23m\u@\h:\w>\e[0m\n"
-
-set completion-ignore-case on
-#       If set to On, readline performs filename matching and completion
-#       in a case-insensitive fashion.
-
-set -o notify
-#       If set, bash reports terminated background jobs immedi-
-#       ately,  rather  than  waiting until before printing the
-#       next primary prompt.
-
-FIGNORE=.class
-#       A colon-separated list of suffixes to ignore when  per-
-#       forming filename completion. A filename whose suffix
-#       matches one of the entries in FIGNORE is excluded from
-#       the list of matched filenames.
-#       A sample value is ``.o:~''.
+# Setup shell history
+#
+# --------------------------------------------------
 
 HISTSIZE=5000
 HISTFILESIZE=10000
@@ -57,30 +41,3 @@ shopt -s cmdhist
 #       If set, bash attempts to save all lines of  a  multiple-
 #       line  command  in  the  same history entry.  This allows
 #       easy re-editing of multi-line commands.
-
-# change to dirs without specifying cd
-shopt -s autocd
-
-unset MAILCHECK
-
-# Define our own OSTYPE that we can efficiently test for later.
-# It's used in several case blocks later.
-#
-if echo ${OSTYPE} | grep -q -i "cygwin"; then
-    TESTABLE_OSTYPE="cygwin"
-elif echo ${OSTYPE} | grep -q -i "linux" ; then
-    TESTABLE_OSTYPE="linux"
-elif echo ${OSTYPE} | grep -q -i "darwin" ; then
-    TESTABLE_OSTYPE="darwin"
-else
-    TESTABLE_OSTYPE="unknown"
-    echo "Unhandled OSTYPE in file: bash_options"
-fi
-
-export LESS_TERMCAP_mb=$'\e[1;32m'
-export LESS_TERMCAP_md=$'\e[1;32m'
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_so=$'\e[01;33m'
-export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_us=$'\e[1;4;31m'

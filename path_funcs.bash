@@ -1,5 +1,9 @@
 # --------------------------------------------------
 #
+# Functions the manipulate PATH and PATH-like variables
+#
+# --------------------------------------------------
+#
 # Does $1 appear in $2 (uses PATH if no $2).
 # Returns 0 (success) if found otherwise 1 (fail).
 # $2 is a path style variable with ":" separating

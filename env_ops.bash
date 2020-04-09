@@ -1,85 +1,10 @@
 # --------------------------------------------------
-
-f()
-{
-    find . -name "$*" -print |& grep -iv "Permission Denied"
-}
-
-# --------------------------------------------------
-
-lsd()
-{
-    if [ $# -eq 0 ]; then
-        ls -d --color=auto */
-    else
-        ls -d --color=auto $1/*/
-    fi
-}
-
-llsd()
-{
-    if [ $# -eq 0 ]; then
-        ls -l -d --color=auto */
-    else
-        ls -l -d --color=auto $1/*/
-    fi
-}
-
+#
+# Environment related setup and operations
+#
 # --------------------------------------------------
 #
-# cd to the path created by substituting $1 for $2 in ${PWD}
-# Handy for working with parallel directory trees.
-# Example: CurDir is /home/howie/arclight/branches/r3.2/hub/rtnms
-# > cdsub r3.2 r3.0
-# You are now in     /home/howie/arclight/branches/r3.0/hub/rtnms
-
-cdsub()
-{
-    cd ${PWD/$1/$2}
-}
-
-# --------------------------------------------------
-
-tree()
-{
-    local tmpFile=/tmp/tree$$
-    find . -type d -not -path "*.git*" -print  > ${tmpFile}
-    local topDir=$(pwd)
-    trap 'rm -f ${tmpFile}; cd ${topDir}' 2 15
-    while read dir; do
-        local dir="cd ${dir// /\\ }"
-        eval "${dir}"
-        echo -e "\E[0m\E[36m ${PWD}:\E[0m"
-        eval $*
-        cd "${topDir}"
-    done < ${tmpFile}
-    rm ${tmpFile}
-}
-
-# tree ()
-# {
-#     top_dir=$(pwd)
-#     for dir in $(find . ! -name CVS -type d -print) ; do
-#         cd $dir
-#         echo $(pwd):
-#         "$@"
-#         cd $top_dir
-#     done
-# }
-
-# --------------------------------------------------
-
-start()	# run command in background, redirect std out/error
-{
-    if [ -d ~/admin/logs ]; then
-        local logDir=~/admin/logs
-    elif [ -d ~/tmp ]; then
-        local logDir=~/tmp
-    else
-        local logDir=/tmp
-    fi
-    "$@" > ${logDir}/logfile 2>&1 &
-}
+unset MAILCHECK
 
 # --------------------------------------------------
 #
@@ -176,18 +101,21 @@ title()
 
 # --------------------------------------------------
 
-# Up "n" directory levels
-# Defaults to 1 if no arg is supplied.
-
-up ()
+start()	# run command in background, redirect std out/error
 {
-    local ups=${1:-1}
-    while [[ $ups -gt 0 ]] ; do
-        local upstring="${upstring}../"
-        ups=$(($ups - 1))
-    done
-    cd $upstring
+    if [ -d ~/admin/logs ]; then
+        local logDir=~/admin/logs
+    elif [ -d ~/tmp ]; then
+        local logDir=~/tmp
+    else
+        local logDir=/tmp
+    fi
+    "$@" > ${logDir}/logfile 2>&1 &
 }
+
+# --------------------------------------------------
+
+alias shutdown='/sbin/shutdown -h now'
 
 # --------------------------------------------------
 
@@ -198,3 +126,19 @@ have()
 }
 
 # --------------------------------------------------
+
+if isCygwin; then
+    alias startx='startxwinhowie > ${HOME}/log/startx.log 2>&1'
+    export DISPLAY=:0
+fi
+
+# --------------------------------------------------
+
+if have xdg-open ; then
+    alias open=xdg-open
+fi
+
+# --------------------------------------------------
+
+sourceIt /usr/local/etc/bash_completion.d/brew
+
