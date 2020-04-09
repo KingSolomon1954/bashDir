@@ -107,9 +107,9 @@ em()
 me()
 {
     if isCygwin; then
-        if [ -f /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32.exe ]; then
+        if fileExists /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32.exe; then
             /cygdrive/c/Program\ Files/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*") &
-        elif [ -f /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32.exe ]; then
+        elif fileExists /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32.exe; then
             /cygdrive/c/Program\ Files\ \(x86\)/JASSPA/MicroEmacs/me32 $(cygpath -i -w "$*" ) &
         else
             echo "Cant find me executable in me() function"

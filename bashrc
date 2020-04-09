@@ -26,10 +26,10 @@ sourceIt ()
 _bd="${HOME}/.bashdir"
 
 sourceIt "${_bd}/os_setup.bash"
+sourceIt "${_bd}/file_ops.bash"
 sourceIt "${_bd}/command_line.bash"
 sourceIt "${_bd}/history.bash"
 sourceIt "${_bd}/directory_ops.bash"
-sourceIt "${_bd}/file_ops.bash"
 sourceIt "${_bd}/cdlist.bash"
 sourceIt "${_bd}/less_ops.bash"
 sourceIt "${_bd}/env_ops.bash"

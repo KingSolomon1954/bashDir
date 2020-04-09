@@ -1,6 +1,6 @@
 # --------------------------------------------------
 #
-# Functions the manipulate PATH and PATH-like variables
+# Functions that manipulate PATH and PATH-like variables
 #
 # --------------------------------------------------
 #

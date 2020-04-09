@@ -20,7 +20,7 @@ HISTCONTROL=ignoredups:ignorespace:erasedups
 #       compound command are not tested, and are added  to  the  history
 #       regardless of the value of HISTCONTROL.
 
-HISTIGNORE="?":"??":pwd:"cd ..":"git status":"man bash":groups:cdl:cda:cdd:cdg:cdl:cdr:cdw
+HISTIGNORE="?":"??":pwd:"cd ..":"man bash":groups:cdl:cda:cdd:cdg:cdl:cdr:cdw
 #       A  colon-separated list of patterns used to decide which command
 #       lines should be saved on the  history  list.   Each  pattern  is
 #       anchored  at  the  beginning of the line and must match the com‐

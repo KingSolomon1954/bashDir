@@ -13,3 +13,12 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 alias diff2columns='diff --side-by-side --suppress-common-lines'
+
+# --------------------------------------------------
+
+fileExists()
+{
+    [[ -f $1 ]]
+}
+
+# --------------------------------------------------
