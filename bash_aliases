@@ -35,7 +35,7 @@ fi
 # -d args to specify info directories. Tried using INFOPATH
 # but it seems INFOPATH does not honor order in a predictable way.
 #
-# Order matters, later dirs overrider earlier dirs
+# Order matters, later dirs override earlier dirs
 t_infoDirs+=" /usr/local/opt/findutils/share/info"
 t_infoDirs+=" /usr/share/info"
 t_infoDirs+=" /Applications/Emacs.app/Contents/Resources/info"

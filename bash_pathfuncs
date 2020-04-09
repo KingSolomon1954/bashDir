@@ -1,6 +1,6 @@
 # --------------------------------------------------
 #
-# Is $1 missing from $2 (or PATH if no $2).
+# Does $1 appear in $2 (uses PATH if no $2).
 # Returns 0 (success) if found otherwise 1 (fail).
 # $2 is a path style variable with ":" separating
 # individual elements.
@@ -16,7 +16,7 @@ isInPath()
 
 # --------------------------------------------------
 #
-# Append $1 to $2 (or PATH if no $2) as long as
+# Append $1 to $2 (uses PATH if no $2) as long as
 # $1 is not already in the path variable and the 
 # directory physically exists. $2 is a path style
 # variable with ":" separating individual elements.
@@ -33,7 +33,7 @@ appendToPath ()
 
 # --------------------------------------------------
 #
-# Prepend $1 to $2 (or PATH if no $2) as long as
+# Prepend $1 to $2 (uses PATH if no $2) as long as
 # $1 is not already in the path variable and the 
 # directory physically exists. $2 is a path style
 # variable with ":" separating individual elements.
@@ -50,7 +50,7 @@ prependToPath ()
 
 # --------------------------------------------------
 #
-# Delete $1 from $2 (or PATH if no $2).
+# Delete $1 from $2 (uses PATH if no $2).
 # $2 is a path style variable with ":" separating
 # individual elements.
 #
