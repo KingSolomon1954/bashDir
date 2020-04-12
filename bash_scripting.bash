@@ -2,7 +2,7 @@
 #
 # Define environment variable holding path to my shell library
 #
-declare -x BASH_LIB=$HOME/lib/shellLib
+export BASH_LIB=$HOME/lib/shellLib
 
 # -----------------------------------------------------------
 #
