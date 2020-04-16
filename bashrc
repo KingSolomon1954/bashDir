@@ -46,6 +46,7 @@ sourceIt "${_bd}/maven_setup.bash"
 sourceIt "${_bd}/nodejs_setup.bash"
 sourceIt "${_bd}/vsc_setup.bash"
 sourceIt "${_bd}/android_setup.bash"
+sourceIt "${_bd}/docker_setup.bash"
 
 # --------------------------------------------------
 
