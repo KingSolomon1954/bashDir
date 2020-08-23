@@ -10,13 +10,13 @@ if [ -f ~/.bashdir/libPath.bash ]; then
     . ~/.bashdir/libPath.bash
 fi
 
-# Construct our PATH using functions from the
-# environment variable path library. When using 
-# envp.append(), if the given directory does not exist
-# on the file space, then PATH is left untouched. The
-# function will alo prevent adding duplicates. With this
-# behavior, the path for all OS's and hosts
-# can be easily handled here without additional special OS tests.
+# Construct our PATH using functions from the environment
+# variable path library. When using envp.append(), if the
+# given directory does not exist on the file space, then PATH
+# is left untouched. The function will alo prevent adding
+# duplicates. With this behavior, the path for all OS's and
+# hosts can be easily handled here without additional special
+# OS tests.
 
 # Standard system path setup here
 #
