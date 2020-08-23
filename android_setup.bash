@@ -4,5 +4,5 @@
 #
 # -----------------------------------------------------------
 
-appendToPath "${HOME}/opt/android-sdk/tools"
-appendToPath "${HOME}/opt/android-sdk/platform-tools"
+envp.append PATH "${HOME}/opt/android-sdk/tools"
+envp.append PATH "${HOME}/opt/android-sdk/platform-tools"

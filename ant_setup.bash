@@ -9,7 +9,7 @@ if isCygwin; then
     if [ ! -d ${ANT_HOME} ]; then
         unset ANT_HOME
     else
-        appendToPath "${ANT_HOME}/bin"
+        envp.append PATH "${ANT_HOME}/bin"
     fi
 fi
     

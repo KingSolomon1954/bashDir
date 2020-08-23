@@ -35,7 +35,7 @@ envls ()
 #
 # Example: envrm PATH
 #
-# Assumes deleteFromPath() function is in the
+# Assumes envp.delete() function is in the
 # environment.
 # 
 # Programming note: regarding SIGINT trap.
@@ -51,8 +51,8 @@ envls ()
 
 envrm ()
 {
-    if ! type -t deleteFromPath > /dev/null 2>&1; then
-        echo "[ERROR] shell function deteFromPath() is undefined"
+    if ! type -t envp.delete > /dev/null 2>&1; then
+        echo "[ERROR] shell function envp.delete() is undefined"
         return 1
     fi
 
@@ -68,7 +68,7 @@ envrm ()
     trap 'echo -e "\nPress ctrl-d to abort"' SIGINT
     select d in ${entries} ; do
         if [ $d ]; then
-            deleteFromPath $d $1
+            envp.delete $1 $d
             break
         else
             echo "Invalid selection."

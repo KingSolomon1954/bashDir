@@ -11,7 +11,7 @@
 #
 isInPath()
 {
-    local v=$(eval echo \$${2-PATH})
+    eval local -r v=\$${2-PATH}
     case ":${v}:" in
         *":$1:"*) return 0;;  # Found
         *)        return 1;;  # Not found
