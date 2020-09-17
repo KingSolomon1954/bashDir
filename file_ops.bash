@@ -8,6 +8,10 @@ if type exa > /dev/null 2>&1 > /dev/null; then
     alias  l='exa      -F              --group-directories-first'
     alias  L='exa -la  -F              --group-directories-first'
     alias LL='exa -lag -F              --group-directories-first'
+    alias lt='exa -T   -F              --group-directories-first'
+    alias lsize='exa -lF -s size     -r -t modified --group-directories-first'
+    alias ldate='exa -lF -s modified -r -t modified --group-directories-first'
+    alias lext='exa  -lF -s extension   -t modified --group-directories-first'
 else
     alias  l='ls       -F --color=auto --group-directories-first'
     alias  L='ls -lsa  -F --color=auto --group-directories-first'

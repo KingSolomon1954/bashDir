@@ -39,8 +39,7 @@ emt()
 
 # --------------------------------------------------
 #
-# Emacs Server Attach - Emacsclient opens file attaching to
-# existing server process
+# Emacs Client in existing frame
 
 ems()
 {
@@ -48,14 +47,7 @@ ems()
         echo "[ERROR] EMACSCLIENT undefined" 1>&2
         return 1
     fi
-
-    local re='^[0-9]+$'
-
-    if [[ $2 =~ $re ]]; then
-        "${EMACSCLIENT}" -n +$2:0 $1
-    else
-        "${EMACSCLIENT}" -n "$@"
-    fi
+    ${EMACSCLIENT} -n -q "$@" &
 }
 
 # --------------------------------------------------
