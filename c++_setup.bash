@@ -19,8 +19,8 @@ alias mo="make TGT=cygwin-x86 CXXDEBUG=\"-O3 -DNDEBUG\""
 
 # Prefer to see .o's these days. So commented out.
 
-# if ! isInPath .o FIGNORE; then
-#     FIGNORE+=":.o"
-# fi
+# envp.setDirMustExist "false"
+# envp.append FIGNORE ".o"
+# envp.setDirMustExist "true"
 
 # -----------------------------------------------------------

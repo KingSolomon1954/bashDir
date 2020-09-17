@@ -10,6 +10,7 @@
 # or if n is not given then cd to the 1st item on the list.
 #
 #    cdl       - display list of remembered directories
+#    cdh       - alias for cdl (cd history)
 #    cda [dir] - add <dir> to directory list [default is cur dir]
 #    cdd [n]   - delete dir <n> from directory list [default is 1]
 #    cdg [n]   - change to directory <n> [default is 1]
@@ -182,5 +183,7 @@ _whichCdListFile()
 }
 
 # -----------------------------------------------------------------
+
+alias cdh=cdl
 
 # end file

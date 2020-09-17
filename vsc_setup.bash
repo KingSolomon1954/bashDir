@@ -4,4 +4,4 @@
 #
 # -----------------------------------------------------------
 
-appendToPath   "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+envp.append PATH "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
