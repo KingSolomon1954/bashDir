@@ -52,3 +52,8 @@ sourceIt "${_bd}/docker_setup.bash"
 
 unset _bd
 unset sourceIt
+
+if type neofetch 1>&2 > /dev/null; then
+    neofetch
+fi
+

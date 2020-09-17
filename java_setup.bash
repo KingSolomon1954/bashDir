@@ -7,7 +7,7 @@
 if isCygwin; then
     export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_60"
     # Needs to precede windows/system/java.exe
-    prependToPath "${JAVA_HOME}/bin"
+    envp.prepend PATH "${JAVA_HOME}/bin"
     if [ ! -d "${JAVA_HOME}" ]; then
         unset JAVA_HOME
     fi
@@ -25,7 +25,7 @@ fi
 
 # -----------------------------------------------------------
 
-appendToPath "${HOME}/pkg/java/jdk-9.0.4/bin"
+envp.append PATH "${HOME}/pkg/java/jdk-9.0.4/bin"
 
 # -----------------------------------------------------------
 
@@ -36,8 +36,8 @@ appendToPath "${HOME}/pkg/java/jdk-9.0.4/bin"
 #       the list of matched filenames.
 #       A sample value is ``.o:~''.
 
-if ! isInPath .class FIGNORE; then
-    FIGNORE+=":.class"
-fi
+envp.setDirMustExist "false"
+envp.append FIGNORE ".class"
+envp.setDirMustExist "true"
 
 # -----------------------------------------------------------
