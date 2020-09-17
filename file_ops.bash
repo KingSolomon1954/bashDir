@@ -4,7 +4,7 @@
 #
 # --------------------------------------------------
 
-if type exa 1>&2 > /dev/null; then
+if type exa > /dev/null 2>&1 > /dev/null; then
     alias  l='exa      -F              --group-directories-first'
     alias  L='exa -la  -F              --group-directories-first'
     alias LL='exa -lag -F              --group-directories-first'
