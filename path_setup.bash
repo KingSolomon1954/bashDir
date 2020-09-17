@@ -29,9 +29,11 @@ deleteFromPath "/usr/local/games"
 
 # Some platform specific setup
 
+prependToPath  "/usr/local/opt/m4/bin"
 prependToPath  "/usr/local/opt/openssl/bin"
 prependToPath  "/usr/local/opt/findutils/libexec/gnubin"
 prependToPath  "/usr/local/opt/coreutils/libexec/gnubin"
 prependToPath  "/usr/local/opt/grep/libexec/gnubin"
+prependToPath  "/usr/local/opt/make/libexec/gnubin"
 
 # More path setup later when bashrc runs
