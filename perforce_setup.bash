@@ -24,11 +24,11 @@ fi
 # -----------------------------------------------------------
 
 if fileExists /Applications/Perforce/p4merge.app/Contents/MacOS/p4merge; then
-    alias gdiff="/Applications/Perforce/p4merge.app/Contents/MacOS/p4merge"
+    alias p4diff="/Applications/Perforce/p4merge.app/Contents/MacOS/p4merge"
 fi
 
 if fileExists /Applications/p4merge.app/Contents/MacOS/p4merge; then
-    alias gdiff="/Applications/p4merge.app/Contents/MacOS/p4merge"
+    alias p4diff="/Applications/p4merge.app/Contents/MacOS/p4merge"
     alias p4merge="/Applications/p4merge.app/Contents/MacOS/p4merge"
 fi
 

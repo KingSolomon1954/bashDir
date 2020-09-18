@@ -47,6 +47,7 @@ sourceIt "${_bd}/nodejs_setup.bash"
 sourceIt "${_bd}/vsc_setup.bash"
 sourceIt "${_bd}/android_setup.bash"
 sourceIt "${_bd}/docker_setup.bash"
+sourceIt "${_bd}/dotfiles_setup.bash"
 
 # --------------------------------------------------
 
